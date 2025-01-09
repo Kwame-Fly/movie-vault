@@ -20,3 +20,9 @@ export const fetchMovieDetails = async (id) => {
     throw new Error('Error fetching movie details');
   }
 };
+
+export const fetchMoviesByCategory = async (category) => {
+  const response = await fetch(`${BASE_URL}?s=${category}&apikey=${API_KEY}`);
+  const data = await response.json();
+  return data;
+};
