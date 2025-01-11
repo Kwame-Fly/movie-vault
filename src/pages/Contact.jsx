@@ -106,10 +106,10 @@ const Contact = () => {
               </div>
               <div className="flex items-center">
                 <span className="material-icons text-blue-600 mr-4">
-                  location_on
+                  LinkedIn
                 </span>
                 <span className="text-gray-800">
-                  123 Movie Vault Street, Filmtown, FL 12345
+                https://www.linkedin.com/in/kwametakyi-kodua/
                 </span>
               </div>
             </div>
