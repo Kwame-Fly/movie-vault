@@ -1,19 +1,27 @@
-import React from "react";
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/NavBar'; 
 import Home from './pages/Home';
-import MoviePage from './pages/MoviePage';
+import Genres from './pages/Genres';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
-const App = () => {
+
+function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
+      <div>
+        <Navbar /> {/* Navbar must be included here */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/movie/:movieId" element={<MoviePage />} />
+          <Route path="/genres" element={<Genres />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />    
         </Routes>
       </div>
     </Router>
   );
-};
+}
 
 export default App;
+

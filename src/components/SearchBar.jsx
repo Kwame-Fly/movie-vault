@@ -3,32 +3,32 @@ import React, { useState } from 'react';
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleInputChange = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const handleSearch = () => {
     if (query.trim()) {
       onSearch(query);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex items-center justify-center bg-white rounded-full shadow-lg p-2 w-full max-w-lg mx-auto"
-    >
+    <div className="flex items-center space-x-2">
       <input
         type="text"
-        placeholder="Search for movies..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="flex-grow p-2 rounded-l-full outline-none"
+        onChange={handleInputChange}
+        placeholder="Search for movies..."
+        className="w-full px-4 py-2 text-gray-800 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
       />
       <button
-        type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700"
+        onClick={handleSearch}
+        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
       >
         Search
       </button>
-    </form>
+    </div>
   );
 };
 
