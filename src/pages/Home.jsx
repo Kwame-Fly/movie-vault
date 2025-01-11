@@ -3,8 +3,8 @@ import SearchBar from '../components/SearchBar';
 import MovieCard from '../components/MovieCard';
 import axios from 'axios';
 
-const BASE_URL = "http://www.omdbapi.com/";
-const API_KEY = "801afbab";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
