@@ -13,54 +13,63 @@ const Genres = () => {
   const API_KEY = import.meta.env.VITE_API_KEY;
 
   useEffect(() => {
-    if (genre) {
-      fetchMoviesByGenre(genre);
-    }
-  }, [genre]);
+    const controller = new AbortController();
 
-  const fetchMoviesByGenre = async (genre) => {
-    setLoading(true);
-    setError('');
-    try {
-      const response = await axios.get(`${BASE_URL}?apikey=${API_KEY}&s=${genre}`);
-      if (response.data.Search) {
-        setMovies(response.data.Search);
-      } else {
-        setError('No movies found for this genre.');
+    const fetchMoviesByGenre = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const response = await axios.get(`${BASE_URL}?apikey=${API_KEY}&s=${genre}`, {
+          signal: controller.signal, // Attach the abort signal
+        });
+        if (response.data.Search) {
+          setMovies(response.data.Search);
+        } else {
+          setError('No movies found for this genre.');
+        }
+      } catch (err) {
+        if (err.name !== 'CanceledError') {
+          setError('An error occurred while fetching movies.');
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError('An error occurred while fetching movies.');
-    } finally {
-      setLoading(false);
+    };
+
+    if (genre) {
+      fetchMoviesByGenre();
     }
-  };
+
+    return () => {
+      controller.abort(); // Clean up when the component unmounts
+    };
+  }, [genre]);
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center text-white p-6"
+      className="min-h-screen bg-cover bg-center text-white p-6"
       style={{
         backgroundImage: `url('https://static.vecteezy.com/system/resources/previews/028/288/858/large_2x/christmas-bokeh-background-wooden-background-with-bokeh-glitter-stars-rustic-wood-and-backdrop-for-product-presentation-ai-generative-free-photo.jpg')`,
       }}
     >
-      <div className="bg-black bg-opacity-50 min-h-screen w-full p-6">
-        <h1 className="text-3xl font-bold mb-6 text-center">{genre || 'Genre'} Movies</h1>
-        {loading && <p className="text-center">Loading...</p>}
-        {error && <p className="text-center text-red-500">{error}</p>}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {movies.map((movie) => (
-            <div key={movie.imdbID} className="bg-gray-800 p-4 rounded shadow">
-              <img src={movie.Poster} alt={movie.Title} className="w-full h-60 object-cover mb-4" />
-              <h3 className="text-lg font-bold">{movie.Title}</h3>
-              <p>{movie.Year}</p>
-            </div>
-          ))}
-        </div>
+      <h1 className="text-3xl font-bold mb-6">{genre || 'Genre'} Movies</h1>
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {movies.map((movie) => (
+          <div key={movie.imdbID} className="bg-gray-800 p-4 rounded shadow">
+            <img src={movie.Poster} alt={movie.Title} className="w-full h-60 object-cover mb-4" />
+            <h3 className="text-lg font-bold">{movie.Title}</h3>
+            <p>{movie.Year}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
 export default Genres;
+
 
 
 
